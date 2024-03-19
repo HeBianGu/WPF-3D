@@ -182,7 +182,8 @@ namespace Kitware.VTK
 		public virtual void SetFileName(string _arg)
 		{
 			vtkAbstractPolyDataReader.vtkAbstractPolyDataReader_SetFileName_08(base.GetCppThis(), _arg);
-		}
+
+        }
 
 		/// <summary>
 		/// Automatically generated type registration mechanics.

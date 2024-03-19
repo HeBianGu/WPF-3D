@@ -31,7 +31,8 @@ namespace HeBianGu.Test.VTK
             //this.ReadOBJ(ren1, renWin);
             //this.ReadFix(ren1, renWin);
             //this.ReadStl(ren1, renWin);
-            this.ReadPLY(ren1, renWin);
+            //this.ReadPLY(ren1, renWin);
+            this.OBJImporter(ren1, renWin);
         }
 
 
@@ -67,6 +68,30 @@ namespace HeBianGu.Test.VTK
             vtkCamera camera = ren1.GetActiveCamera();
             camera.Zoom(1.5);
         }
+
+
+        public void OBJImporter(vtkRenderer ren1, vtkRenderWindow renWin)
+        {
+            string filePath = @"H:\Github\vtk-examples-master\src\Testing\Data\Boy\boy.obj";
+            //filePath = "H:\\Github\\vtk-examples-master\\src\\Testing\\Data\\doorman\\doorman.obj";
+            vtkOBJImporter importer = vtkOBJImporter.New();
+            importer.SetFileName(filePath);
+            importer.SetFileNameMTL(@"H:\Github\vtk-examples-master\src\Testing\Data\Boy\boy.mtl");
+            //importer.SetFileNameMTL(@"H:\Github\vtk-examples-master\src\Testing\Data\doorman\doorman.mtl");
+            importer.SetTexturePath(System.IO.Path.GetDirectoryName(filePath));
+            // get a reference to the renderwindow of our renderWindowControl1
+            vtkRenderWindow renderWindow = renWin;
+            // renderer
+            vtkRenderer renderer = renderWindow.GetRenderers().GetFirstRenderer();
+            // set background color
+            renderer.SetBackground(0.3, 0.6, 0.3);
+            // add our actor to the renderer
+            //renderer.AddActor(actor);
+            renderWindow.Render();
+            importer.SetRenderWindow(renWin);
+            importer.Update();
+        }
+
         private void ReadOBJ(vtkRenderer ren1, vtkRenderWindow renWin)
         {
             // Path to vtk data must be set as an environment variable
