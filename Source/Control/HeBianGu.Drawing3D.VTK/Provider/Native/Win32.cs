@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 namespace HeBianGu.Drawing3D.VTK
 {
     public static class Win32

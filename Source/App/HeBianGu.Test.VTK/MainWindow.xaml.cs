@@ -71,8 +71,8 @@ namespace HeBianGu.Test.VTK
         {
             // Path to vtk data must be set as an environment variable
             // VTK_DATA_ROOT = "C:\VTK\vtkdata-5.8.0"
-            vtkTesting test = vtkTesting.New();
-            string root = test.GetDataRoot();
+            var test = vtkTestingObjectFactory.New();
+            //string root = test.GetDataRoot();
             // caution: vtkdata-5.8.0\Data\mni-surface-mesh.obj is no valid obj file!
             //string filePath = System.IO.Path.Combine(root, @"Data\mni-surface-mesh.obj");
             string filePath = @"E:\3D\41-bed_room_fbx_obj\bed_room.obj";
@@ -107,8 +107,8 @@ namespace HeBianGu.Test.VTK
         {
             // Path to vtk data must be set as an environment variable
             // VTK_DATA_ROOT = "C:\VTK\vtkdata-5.8.0"
-            vtkTesting test = vtkTesting.New();
-            string root = test.GetDataRoot();
+            var test = vtkTestingObjectFactory.New();
+            //string root = test.GetDataRoot();
             // caution: vtkdata-5.8.0\Data\mni-surface-mesh.obj is no valid obj file!
             //string filePath = System.IO.Path.Combine(root, @"Data\mni-surface-mesh.obj");
             string filePath = @"E:\3D\41-bed_room_fbx_obj\bed_room.obj";
@@ -145,8 +145,8 @@ namespace HeBianGu.Test.VTK
         {
             // Path to vtk data must be set as an environment variable
             // VTK_DATA_ROOT = "C:\VTK\vtkdata-5.8.0"
-            vtkTesting test = vtkTesting.New();
-            string root = test.GetDataRoot();
+            var test = vtkTestingObjectFactory.New();
+            //string root = test.GetDataRoot();
             string filePath = "E:\\3D\\models\\PLY\\Wuson.ply";
             vtkPLYReader reader = vtkPLYReader.New();
             reader.SetFileName(filePath);
@@ -175,86 +175,86 @@ namespace HeBianGu.Test.VTK
         /// vtkRenderWindow without a Windows Form
         /// </summary>
         /// <param name="argv"></param>
-        public static void Main(vtkRenderer ren1, vtkRenderWindow renWin)
-        {
-            // Demonstrate how to use the vtkBoxWidget 3D widget,
-            // This script uses a 3D box widget to define a "clipping box" to clip some
-            // simple geometry (a mace). Make sure that you hit the "W" key to activate the widget.
-            // Create a mace out of filters.
-            sphere = vtkSphereSource.New();
-            cone = vtkConeSource.New();
-            glyph = vtkGlyph3D.New();
+        //public static void Main(vtkRenderer ren1, vtkRenderWindow renWin)
+        //{
+        //    // Demonstrate how to use the vtkBoxWidget 3D widget,
+        //    // This script uses a 3D box widget to define a "clipping box" to clip some
+        //    // simple geometry (a mace). Make sure that you hit the "W" key to activate the widget.
+        //    // Create a mace out of filters.
+        //    sphere = vtkSphereSource.New();
+        //    cone = vtkConeSource.New();
+        //    glyph = vtkGlyph3D.New();
 
-            glyph.SetInputConnection(sphere.GetOutputPort());
-            glyph.SetSource(cone.GetOutput());
-            glyph.SetVectorModeToUseNormal();
-            glyph.SetScaleModeToScaleByVector();
-            glyph.SetScaleFactor(0.25);
+        //    glyph.SetInputConnection(sphere.GetOutputPort());
+        //    glyph.SetSource(cone.GetOutput());
+        //    glyph.SetVectorModeToUseNormal();
+        //    glyph.SetScaleModeToScaleByVector();
+        //    glyph.SetScaleFactor(0.25);
 
-            // The sphere and spikes are appended into a single polydata. This just makes things
-            // simpler to manage.
-            apd = vtkAppendPolyData.New();
-            apd.AddInput(glyph.GetOutput());
-            apd.AddInput(sphere.GetOutput());
+        //    // The sphere and spikes are appended into a single polydata. This just makes things
+        //    // simpler to manage.
+        //    apd = vtkAppendPolyData.New();
+        //    apd.AddInput(glyph.GetOutput());
+        //    apd.AddInput(sphere.GetOutput());
 
-            maceMapper = vtkPolyDataMapper.New();
-            maceMapper.SetInputConnection(apd.GetOutputPort());
+        //    maceMapper = vtkPolyDataMapper.New();
+        //    maceMapper.SetInputConnection(apd.GetOutputPort());
 
-            maceActor = vtkLODActor.New();
-            maceActor.SetMapper(maceMapper);
-            maceActor.VisibilityOn();
+        //    maceActor = vtkLODActor.New();
+        //    maceActor.SetMapper(maceMapper);
+        //    maceActor.VisibilityOn();
 
-            // This portion of the code clips the mace with the vtkPlanes implicit function.
-            // The clipped region is colored green.
-            planes = vtkPlanes.New();
-            clipper = vtkClipPolyData.New();
+        //    // This portion of the code clips the mace with the vtkPlanes implicit function.
+        //    // The clipped region is colored green.
+        //    planes = vtkPlanes.New();
+        //    clipper = vtkClipPolyData.New();
 
-            clipper.SetInputConnection(apd.GetOutputPort());
-            clipper.SetClipFunction(planes);
-            clipper.InsideOutOn();
+        //    clipper.SetInputConnection(apd.GetOutputPort());
+        //    clipper.SetClipFunction(planes);
+        //    clipper.InsideOutOn();
 
-            selectMapper = vtkPolyDataMapper.New();
-            selectMapper.SetInputConnection(clipper.GetOutputPort());
+        //    selectMapper = vtkPolyDataMapper.New();
+        //    selectMapper.SetInputConnection(clipper.GetOutputPort());
 
-            selectActor = vtkLODActor.New();
-            selectActor.SetMapper(selectMapper);
-            selectActor.GetProperty().SetColor(0, 1, 0);
-            selectActor.VisibilityOff();
-            selectActor.SetScale(1.01, 1.01, 1.01);
+        //    selectActor = vtkLODActor.New();
+        //    selectActor.SetMapper(selectMapper);
+        //    selectActor.GetProperty().SetColor(0, 1, 0);
+        //    selectActor.VisibilityOff();
+        //    selectActor.SetScale(1.01, 1.01, 1.01);
 
-            // Create the RenderWindow, Renderer and both Actors
-            //ren1 = vtkRenderer.New();
-            //renWin = vtkRenderWindow.New();
-            renWin.AddRenderer(ren1);
-            iren = vtkRenderWindowInteractor.New();
-            iren.SetRenderWindow(renWin);
+        //    // Create the RenderWindow, Renderer and both Actors
+        //    //ren1 = vtkRenderer.New();
+        //    //renWin = vtkRenderWindow.New();
+        //    renWin.AddRenderer(ren1);
+        //    iren = vtkRenderWindowInteractor.New();
+        //    iren.SetRenderWindow(renWin);
 
-            // The SetInteractor method is how 3D widgets are associated with the render
-            // window interactor. Internally, SetInteractor sets up a bunch of callbacks
-            // using the Command/Observer mechanism (AddObserver()).
-            boxWidget = vtkBoxWidget.New();
-            boxWidget.SetInteractor(iren);
-            boxWidget.SetPlaceFactor(1.25);
-            ren1.AddActor(maceActor);
-            ren1.AddActor(selectActor);
+        //    // The SetInteractor method is how 3D widgets are associated with the render
+        //    // window interactor. Internally, SetInteractor sets up a bunch of callbacks
+        //    // using the Command/Observer mechanism (AddObserver()).
+        //    boxWidget = vtkBoxWidget.New();
+        //    boxWidget.SetInteractor(iren);
+        //    boxWidget.SetPlaceFactor(1.25);
+        //    ren1.AddActor(maceActor);
+        //    ren1.AddActor(selectActor);
 
-            // Add the actors to the renderer, set the background and size
-            ren1.SetBackground(0.1, 0.2, 0.4);
-            renWin.SetSize(300, 300);
+        //    // Add the actors to the renderer, set the background and size
+        //    ren1.SetBackground(0.1, 0.2, 0.4);
+        //    renWin.SetSize(300, 300);
 
-            // Place the interactor initially. The input to a 3D widget is used to 
-            // initially position and scale the widget. The EndInteractionEvent is
-            // observed which invokes the SelectPolygons callback.
-            boxWidget.SetInput(glyph.GetOutput());
-            boxWidget.PlaceWidget();
-            boxWidget.EndInteractionEvt += new vtkObject.vtkObjectEventHandler(SelectPolygons);
+        //    // Place the interactor initially. The input to a 3D widget is used to 
+        //    // initially position and scale the widget. The EndInteractionEvent is
+        //    // observed which invokes the SelectPolygons callback.
+        //    boxWidget.SetInput(glyph.GetOutput());
+        //    boxWidget.PlaceWidget();
+        //    boxWidget.EndInteractionEvt += new vtkObject.vtkObjectEventHandler(SelectPolygons);
 
-            // render the image
-            iren.Initialize();
-            iren.Start();
-            //Clean up
-            deleteAllVTKObjects();
-        }
+        //    // render the image
+        //    iren.Initialize();
+        //    iren.Start();
+        //    //Clean up
+        //    deleteAllVTKObjects();
+        //}
 
         static vtkSphereSource sphere;
         static vtkConeSource cone;

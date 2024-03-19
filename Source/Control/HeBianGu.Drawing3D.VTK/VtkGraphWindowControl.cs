@@ -1,4 +1,5 @@
 ﻿using Kitware.VTK;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -16,7 +17,7 @@ namespace HeBianGu.Drawing3D.VTK
 
         public VtkGraphWindowControl()
         {
-            _contextView = new vtkContextView();
+            //_contextView = new vtkContextView();
         }
 
         protected override void OnInitialize(IntPtr hWnd)

@@ -2,14 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCpu;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Kitware9.3\Kitware.VTK\Kitware.VTK.csproj" />
     <ProjectReference Include="..\..\Kitware\Kitware.mummy.Runtime\Kitware.mummy.Runtime.csproj" />
-    <ProjectReference Include="..\..\Kitware\Kitware.VTK\Kitware.VTK.csproj" />
   </ItemGroup>
 
 </Project>

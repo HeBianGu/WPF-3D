@@ -1,4 +1,5 @@
 ﻿using Kitware.VTK;
+using System;
 using System.Windows;
 namespace HeBianGu.Drawing3D.VTK
 {
@@ -89,8 +90,8 @@ namespace HeBianGu.Drawing3D.VTK
         /// <seealso cref="M:ActivizWPF.Framework.Native.HwndWrapper.OnInitialize(IntPtr)"/>
         protected override void OnInitialize(IntPtr hWnd)
         {
-            try
-            {
+            //try
+            //{
                 vtkLogoWidget vtkLogoWidget = new vtkLogoWidget();
 
                 _renderer = vtkRenderer.New();
@@ -109,11 +110,11 @@ namespace HeBianGu.Drawing3D.VTK
                 AttachInteractor();
 
                 vtkLogoWidget.Dispose();
-            }
-            catch (Exception ex)
-            {
-                //log.ErrorException("OnInitialize()", ex);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //log.ErrorException("OnInitialize()", ex);
+            //}
         }
 
         /// <summary>

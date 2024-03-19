@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net7.0-windows</TargetFrameworks>
+    <UseWindowsForms>True</UseWindowsForms>
+    <Platforms>AnyCpu;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="*.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Kitware.mummy.Runtime.Unmanaged.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Kitware\Kitware.mummy.Runtime\Kitware.mummy.Runtime.csproj" />
+  </ItemGroup>
+</Project>
