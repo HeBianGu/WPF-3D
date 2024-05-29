@@ -1,10 +1,13 @@
 ﻿using Kitware.VTK;
+using System;
 using System.IO;
+using System.Numerics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -24,15 +27,121 @@ namespace HeBianGu.Test.VTK
         }
         private void w_Loaded(object sender, RoutedEventArgs e)
         {
-            vtkRenderer ren1 = w.RenderWindow.GetRenderers().GetFirstRenderer();
-            vtkRenderWindow renWin = w.RenderWindow;
-            //BoxWidgetClass.Main(ren1, renWin);
-            //this.Method();
-            //this.ReadOBJ(ren1, renWin);
+            vtkRenderer renderer = this.w.RenderWindow.GetRenderers().GetFirstRenderer();
+            //renderer.RenderPolyDataReader<vtkOBJReader>(this.GetRootData("Boy\\boy.obj"));
+            //renderer.RenderPolyDataReader<vtkDEMReader>(this.GetRootData("Boy\\boy.obj"));
+
             //this.ReadFix(ren1, renWin);
             //this.ReadStl(ren1, renWin);
             //this.ReadPLY(ren1, renWin);
-            this.OBJImporter(ren1, renWin);
+            //this.OBJImporter(ren1, renWin);
+
+
+            //renderer.RendervtkProp(() =>
+            //{
+            //    string filePath = this.GetRootData(@"SainteHelens.dem");
+            //    vtkDEMReader reader = vtkDEMReader.New();
+            //    reader.SetFileName(filePath);
+            //    reader.Update();
+
+            //    vtkLookupTable lut = vtkLookupTable.New();
+            //    lut.SetHueRange(0.6, 0);
+            //    lut.SetSaturationRange(1.0, 0);
+            //    lut.SetValueRange(0.5, 1.0);
+            //    double[] range = reader.GetOutput().GetScalarRange();
+            //    lut.SetTableRange(range[0], range[1]);
+
+            //    // Visualize
+            //    vtkImageMapToColors mapColors = vtkImageMapToColors.New();
+            //    mapColors.SetLookupTable(lut);
+            //    mapColors.SetInputConnection(reader.GetOutputPort());
+
+            //    // Create an actor
+            //    vtkImageActor actor = vtkImageActor.New();
+            //    actor.SetInputData(mapColors.GetOutput());
+
+            //    return actor;
+            //});
+
+            //renderer.Render(() =>
+            //{
+            //    vtkJPEGReader reader = vtkJPEGReader.New();
+            //    reader.SetFileName(this.GetRootData(@"Gourds2.jpg"));
+            //    reader.Update();
+            //    vtkImageViewer2 imageViewer = vtkImageViewer2.New();
+            //    imageViewer.SetInputConnection(reader.GetOutputPort());
+            //    renderer.SetBackground(0.2, 0.3, 0.4);
+            //    imageViewer.SetRenderer(renderer);
+            //});
+
+            //this.w.RenderWindow.Render();
+
+            //this.ReadJPEG(this.GetRootData("Gourds2.jpg"));
+
+            //this.ReadPNG(this.GetRootData("Gourds.png"));
+            //this.w.RenderWindow.Render();
+
+            this.w.RenderWindow.RenderOBJImporter(@"Boy\boy.obj".ToRootData());
+        }
+
+
+        public vtkRenderer GetVtkRenderer()
+        {
+            return this.w.RenderWindow.GetRenderers().GetFirstRenderer();
+        }
+
+
+        private void ReadPNG(string filePath)
+        {
+            vtkPNGReader reader = vtkPNGReader.New();
+            reader.SetFileName("D:\\GitHub\\WPF-3D\\Source\\App\\HeBianGu.Test.VTK\\bin\\x64\\Debug\\net7.0-windows\\Data\\fran_cut.png");
+            reader.Update();
+            // Visualize
+            //vtkImageViewer2 imageViewer = vtkImageViewer2.New();
+            //imageViewer.SetInputConnection(reader.GetOutputPort());
+            //imageViewer.SetupInteractor(this.w.Interactor);                              
+            //imageViewer.Render();
+            //imageViewer.SetRenderWindow(this.w.RenderWindow);
+            //this.w.Interactor.Start();
+            // get a reference to the renderwindow of our renderWindowControl1
+            //// renderer
+            //vtkRenderer renderer =this.GetVtkRenderer();
+            //// set background color
+            //renderer.SetBackground(0.2, 0.3, 0.4);
+            ////imageViewer.SetRenderer(renderer);
+            //imageViewer.SetRenderWindow(this.w.RenderWindow);
+
+            //vtkImageMapper3D vtkImageMapper = (vtkImageMapper3D)vtkImageMapper3D.New();
+            //vtkImageMapper.SetInputConnection(reader.GetOutputPort());
+            vtkImageActor vtkImageActor = vtkImageActor.New();
+            vtkImageActor.SetInputData(reader.GetImageDataInput(0));
+            var render = this.GetVtkRenderer();
+            render.AddActor(vtkImageActor);
+
+        }
+
+        private void ReadJPEG(string filePath)
+        {
+            // Path to vtk data must be set as an envir
+            vtkJPEGReader reader = vtkJPEGReader.New();
+            reader.SetFileName(filePath);
+            reader.Update();
+
+            // Visualize
+            vtkImageViewer2 imageViewer = vtkImageViewer2.New();
+            imageViewer.SetInputConnection(reader.GetOutputPort());
+            // get a reference to the renderwindow of our renderWindowControl1
+            // renderer
+            vtkRenderer renderer = this.GetVtkRenderer();
+            // set background color
+            renderer.SetBackground(0.2, 0.3, 0.4);
+            imageViewer.SetRenderer(renderer);
+        }
+
+        public string GetRootData(string path)
+        {
+            string root = AppDomain.CurrentDomain.BaseDirectory;
+            return System.IO.Path.Combine(root, "Data", path);
         }
 
 
@@ -92,6 +201,7 @@ namespace HeBianGu.Test.VTK
             importer.Update();
         }
 
+
         private void ReadOBJ(vtkRenderer ren1, vtkRenderWindow renWin)
         {
             // Path to vtk data must be set as an environment variable
@@ -106,28 +216,11 @@ namespace HeBianGu.Test.VTK
             filePath = "E:\\3D\\helix\\Models\\obj\\tour.obj";
             filePath = "E:\\3D\\helix\\Models\\obj\\wall12.obj";
             vtkOBJReader reader = vtkOBJReader.New();
-            if (!File.Exists(filePath))
-            {
-                MessageBox.Show("Cannot read file \"" + filePath + "\"", "Error");
-                return;
-            }
             reader.SetFileName(filePath);
             reader.Update();
-            // Visualize
-            vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
-            mapper.SetInputConnection(reader.GetOutputPort());
-            vtkActor actor = vtkActor.New();
-            actor.SetMapper(mapper);
-            // get a reference to the renderwindow of our renderWindowControl1
-            vtkRenderWindow renderWindow = renWin;
-            // renderer
-            vtkRenderer renderer = renderWindow.GetRenderers().GetFirstRenderer();
-            // set background color
-            renderer.SetBackground(0.3, 0.6, 0.3);
-            // add our actor to the renderer
-            renderer.AddActor(actor);
-            renderWindow.Render();
         }
+
+
         private void ReadStl(vtkRenderer ren1, vtkRenderWindow renWin)
         {
             // Path to vtk data must be set as an environment variable
@@ -142,11 +235,6 @@ namespace HeBianGu.Test.VTK
             filePath = "E:\\3D\\helix\\Models\\obj\\tour.obj";
             filePath = "E:\\3D\\models\\STL\\Spider_ascii.stl";
             vtkSTLReader reader = vtkSTLReader.New();
-            if (!File.Exists(filePath))
-            {
-                MessageBox.Show("Cannot read file \"" + filePath + "\"", "Error");
-                return;
-            }
             reader.SetFileName(filePath);
             reader.Update();
             // Visualize
@@ -190,6 +278,42 @@ namespace HeBianGu.Test.VTK
             // add our actor to the renderer
             renderer.AddActor(actor);
             renderWindow.Render();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
+        private void Yaw_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var camera = this.GetVtkRenderer().GetActiveCamera();
+            camera.Yaw(30);
+            this.w.RenderWindow.Render();
+            var wc = camera.GetWindowCenter();
+        }
+
+        private void Roll_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var render = this.GetVtkRenderer();
+            var camera = this.GetVtkRenderer().GetActiveCamera();
+            //camera.Roll(30);
+            //double r= camera.GetRoll();
+            //this.GetVtkRenderer().Render();
+            //this.w.RenderWindow.Render();
+            var wc = camera.GetWindowCenter();
+            //camera.SetWindowCenter(0, 0);
+            //camera.SetLeftEye(50);
+
+            //camera.Render(render);
+
+            var matrix = camera.GetViewTransformMatrix();
+            var transfrom = camera.GetViewTransformObject();
+            transfrom.RotateZ(3);
+
+            //camera.Zoom(30);
+            this.w.RenderWindow.Render();
         }
     }
 

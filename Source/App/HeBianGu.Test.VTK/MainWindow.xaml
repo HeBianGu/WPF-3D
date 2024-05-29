@@ -8,16 +8,23 @@
         Width="800"
         Height="450"
         mc:Ignorable="d">
-    <Grid>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <Button Width="120"
+                    Height="30"
+                    Click="Roll_Button_Click"
+                    Content="Roll" />
+            <Button Width="120"
+                    Height="30"
+                    Click="Yaw_Button_Click"
+                    Content="Yaw" />
+        </DockPanel>
         <ClippingHwndHost>
             <ClippingHwndHost.Content>
                 <VtkRenderWindowControl x:Name="w"
                                         Loaded="w_Loaded" />
             </ClippingHwndHost.Content>
         </ClippingHwndHost>
-        <Button Width="300"
-                Height="300"
-                Background="Red"
-                Content="222" />
-    </Grid>
+
+    </DockPanel>
 </Window>
